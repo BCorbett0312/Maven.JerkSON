@@ -3,14 +3,138 @@ package io.zipcoder;
 import io.zipcoder.utils.Item;
 import io.zipcoder.utils.ItemParseException;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ItemParser {
+
+    Pattern pattern;
+    Matcher matcher;
+    Integer exceptionCounter = 0;
+
     public List<Item> parseItemList(String valueToParse) {
+        String fixed = fixInput(valueToParse);
+        List<Item> listOfItems = new ArrayList<>();
+        String[] stringArrayOfItems = fixed.split("##");
+        for(String str: stringArrayOfItems){
+            try {
+                listOfItems.add(parseSingleItem(str));
+            } catch (ItemParseException e){
+
+            }
+
+        }
+
+        return listOfItems;
+    }
+
+    public Item parseSingleItem(String singleItem)throws ItemParseException {
+        String fixed =fixInput(singleItem);
+
+        String name;
+        Double price;
+        String type;
+        String expiration;
+
+        try {
+            name = parseName(fixed).toLowerCase();
+        } catch (NullPointerException e){
+            exceptionCounter++;
+            throw new ItemParseException();
+
+        }
+
+        try{
+            price = parsePrice(fixed);
+        } catch (NullPointerException | NumberFormatException e){
+            exceptionCounter++;
+            throw new ItemParseException();
+        }
+
+
+        try{
+            type = parseType(fixed).toLowerCase();
+        } catch (NullPointerException e){
+            exceptionCounter++;
+            throw new ItemParseException();
+        }
+
+        try{
+            expiration = parseExpiration(fixed).toLowerCase();
+        } catch (NullPointerException e){
+            exceptionCounter++;
+            throw new ItemParseException();
+        }
+
+
+
+
+
+
+        return new Item(name, price, type, expiration);
+    }
+
+    private String parseName(String toBeParsed)  {
+        pattern = Pattern.compile("(?i:.*name:(.*?);)");
+        matcher = pattern.matcher(toBeParsed);
+        String result;
+        if(matcher.find()){
+            result = matcher.group(1);
+            return result;
+        }
+        return null;
+
+
+    }
+
+    private Double parsePrice(String toBeParsed) {
+        pattern = pattern.compile("(?i:.*price.(.*?);)");
+        matcher = pattern.matcher(toBeParsed);
+        if(matcher.find()){
+            return Double.parseDouble(matcher.group(1));
+        }
+
         return null;
     }
 
-    public Item parseSingleItem(String singleItem) throws ItemParseException {
+    private String parseType(String toBeParsed) {
+        pattern = pattern.compile("(?i:.*type:(.*?);)");
+        matcher = pattern.matcher(toBeParsed);
+        if(matcher.find()){
+            return matcher.group(1);
+        }
         return null;
     }
+
+    private String parseExpiration(String toBeParse)  {
+        pattern = pattern.compile("(?i:.*expiration:(\\d{1,2}/\\d{2}/\\d{4}))");
+        matcher = pattern.matcher(toBeParse);
+        if(matcher.find()){
+            return matcher.group(1);
+        }
+
+        return null;
+    }
+
+
+
+    private String fixInput(String toFix){
+        pattern = pattern.compile("@|\\^|\\*|%");
+        matcher = pattern.matcher(toFix);
+        String result = matcher.replaceAll(":");
+        return result;
+    }
+
+
+    private List<String> splitItem(String toSplit){
+
+
+        return null;
+
+    }
+
+
+
 }
