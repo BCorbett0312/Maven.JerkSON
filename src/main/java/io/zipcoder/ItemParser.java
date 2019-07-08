@@ -129,12 +129,30 @@ public class ItemParser {
 
 
     private List<String> splitItem(String toSplit){
+        List<String> result = new ArrayList<>();
 
+        pattern = pattern.compile("(.*?;)|(.*?##)");
+        matcher = pattern.matcher(toSplit);
 
-        return null;
+        while(matcher.find()){
+            result.add(matcher.group(1));
+        }
+
+        return result;
 
     }
 
+    private List<String> splitFullList(String toSplit){
+        List<String> result = new ArrayList<>();
+
+        pattern = pattern.compile("(.*?##)");
+        matcher = pattern.matcher(toSplit);
+
+        while(matcher.find()){
+            result.add(matcher.group(1));
+        }
+        return result;
+    }
 
 
 }
