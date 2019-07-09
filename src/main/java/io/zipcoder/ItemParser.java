@@ -16,9 +16,9 @@ public class ItemParser {
 
 
     public List<Item> parseItemList(String valueToParse) {
-
+        pattern = pattern.compile("##");
         List<Item> listOfItems = new ArrayList<>();
-        String[] stringArrayOfItems = valueToParse.split("##");
+        String[] stringArrayOfItems = pattern.split(valueToParse);
         for(String str: stringArrayOfItems){
             try {
                 listOfItems.add(parseSingleItem(str));
