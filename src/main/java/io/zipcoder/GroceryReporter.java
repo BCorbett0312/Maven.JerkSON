@@ -78,17 +78,17 @@ public class GroceryReporter {
             Integer counterForLines = 0;
             for(Double price: priceSet){
 
-                priceString += String.format("Price:%7.2f        seen: %d time%s",
+                priceString += String.format("Price: \t %3.2f\t\t seen: %d time%s",
                         price, priceCounts.get(price), timeOrTimes(priceCounts.get(price)))+"\n";
                 if(counterForLines == 0){
-                    priceString += "-------------        -------------\n";
+                    priceString += "-------------\t\t -------------\n";
                     counterForLines++;
                 }
 
                 total += priceCounts.get(price);
             }
-            result += String.format("name:%8s        seen: %d time%s", name, total, timeOrTimes(total)) +
-                    "\n"+ "=============        =============\n";
+            result += String.format("name:%8s \t\t seen: %d time%s", name, total, timeOrTimes(total)) +
+                    "\n"+ "============= \t \t =============\n";
             result += priceString + "\n";
 
         }
@@ -98,30 +98,30 @@ public class GroceryReporter {
 
 
 
-
-        String actual = "name:    Milk \t\t seen: 6 times\n" +
-                "============= \t \t =============\n" +
-                "Price: \t 3.23\t\t seen: 5 times\n" +
-                "-------------\t\t -------------\n" +
-                "Price: \t 1.23\t\t seen: 1 time\n" +
-                "\n" +
-                "name:   Bread \t\t seen: 6 times\n" +
-                "============= \t \t =============\n" +
-                "Price: \t 1.23\t\t seen: 6 times\n" +
-                "-------------\t\t -------------\n" +
-                "\n" +
-                "name: Cookies \t\t seen: 8 times\n" +
-                "============= \t \t =============\n" +
-                "Price: \t 2.25\t\t seen: 8 times\n" +
-                "-------------\t\t -------------\n" +
-                "\n" +
-                "name:  Apples \t\t seen: 4 times\n" +
-                "============= \t \t =============\n" +
-                "Price: \t 0.25\t\t seen: 2 times\n" +
-                "-------------\t\t -------------\n" +
-                "Price: \t 0.23\t\t seen: 2 times\n" +
-                "\n" +
-                "Errors         \t \t seen: 4 times\n";
+//        UGH THIS STRING SUCKS
+//        String actual = "name:    Milk \t\t seen: 6 times\n" +
+//                "============= \t \t =============\n" +
+//                "Price: \t 3.23\t\t seen: 5 times\n" +
+//                "-------------\t\t -------------\n" +
+//                "Price: \t 1.23\t\t seen: 1 time\n" +
+//                "\n" +
+//                "name:   Bread \t\t seen: 6 times\n" +
+//                "============= \t \t =============\n" +
+//                "Price: \t 1.23\t\t seen: 6 times\n" +
+//                "-------------\t\t -------------\n" +
+//                "\n" +
+//                "name: Cookies \t\t seen: 8 times\n" +
+//                "============= \t \t =============\n" +
+//                "Price: \t 2.25\t\t seen: 8 times\n" +
+//                "-------------\t\t -------------\n" +
+//                "\n" +
+//                "name:  Apples \t\t seen: 4 times\n" +
+//                "============= \t \t =============\n" +
+//                "Price: \t 0.25\t\t seen: 2 times\n" +
+//                "-------------\t\t -------------\n" +
+//                "Price: \t 0.23\t\t seen: 2 times\n" +
+//                "\n" +
+//                "Errors         \t \t seen: 4 times\n";
 
 
 
