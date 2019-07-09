@@ -12,12 +12,13 @@ public class ItemParser {
 
     Pattern pattern;
     Matcher matcher;
+    Pattern pattern2;
     Integer exceptionCounter = 0;
 
     public List<Item> parseItemList(String valueToParse) {
-        String fixed = fixInput(valueToParse);
+
         List<Item> listOfItems = new ArrayList<>();
-        String[] stringArrayOfItems = fixed.split("##");
+        String[] stringArrayOfItems = valueToParse.split("##");
         for(String str: stringArrayOfItems){
             try {
                 listOfItems.add(parseSingleItem(str));
@@ -121,38 +122,43 @@ public class ItemParser {
 
 
     private String fixInput(String toFix){
-        pattern = pattern.compile("@|\\^|\\*|%");
+        pattern = pattern.compile("@|\\^|\\*|%|!");
         matcher = pattern.matcher(toFix);
         String result = matcher.replaceAll(":");
-        return result;
+
+        pattern = pattern.compile("Food(.*)expiration");
+        matcher = pattern.matcher(result);
+        String ultimateFix = matcher.replaceAll("Food;expiration");
+        System.out.println(ultimateFix);
+        return ultimateFix;
     }
 
 
-    private List<String> splitItem(String toSplit){
-        List<String> result = new ArrayList<>();
-
-        pattern = pattern.compile("(.*?;)|(.*?##)");
-        matcher = pattern.matcher(toSplit);
-
-        while(matcher.find()){
-            result.add(matcher.group(1));
-        }
-
-        return result;
-
-    }
-
-    private List<String> splitFullList(String toSplit){
-        List<String> result = new ArrayList<>();
-
-        pattern = pattern.compile("(.*?##)");
-        matcher = pattern.matcher(toSplit);
-
-        while(matcher.find()){
-            result.add(matcher.group(1));
-        }
-        return result;
-    }
+//    private List<String> splitItem(String toSplit){
+//        List<String> result = new ArrayList<>();
+//
+//        pattern = pattern.compile("(.*?;)|(.*?#)");
+//        matcher = pattern.matcher(toSplit);
+//
+//        while(matcher.find()){
+//            result.add(matcher.group(1));
+//        }
+//
+//        return result;
+//
+//    }
+//
+//    private List<String> splitFullList(String toSplit){
+//        List<String> result = new ArrayList<>();
+//
+//        pattern = pattern.compile("(.*?##)");
+//        matcher = pattern.matcher(toSplit);
+//
+//        while(matcher.find()){
+//            result.add(matcher.group(1));
+//        }
+//        return result;
+//    }
 
 
 }
