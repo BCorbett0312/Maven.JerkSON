@@ -21,16 +21,16 @@ public class GroceryReporter {
         List<Item> itemList = parser.parseItemList(originalFileText);
         Map<String, Map> resultMap = new LinkedHashMap<>();
         for(Item item : itemList){
-            boolean inserted = false;
+            boolean needsToBeCreated = true;
             String name = item.getName();
             Set<String> nameSet = resultMap.keySet();
             for(String key : nameSet){
                 if(name.equals(key)){
                     putPriceAndCount(item, resultMap.get(key));
-                    inserted = true;
+                    needsToBeCreated = false;
                 }
             }
-            if(!inserted){
+            if(needsToBeCreated){
                 Map<Double, Integer> priceMap = new LinkedHashMap<>();
                 priceMap.put(item.getPrice(), 1);
                 resultMap.put(item.getName(), priceMap);
@@ -42,25 +42,25 @@ public class GroceryReporter {
 
 
     public void putPriceAndCount(Item item, Map<Double, Integer> priceAndCount){
-        boolean inserted = false;
+        boolean needsToBeCreated = true;
         Set<Double> priceSet = priceAndCount.keySet();
         for(Double price: priceSet){
             if(price.equals(item.getPrice())){
                 Integer counter = priceAndCount.get(price);
                 priceAndCount.put(price, ++counter);
-                inserted = true;
+                needsToBeCreated = false;
             }
         }
-        if(!inserted){
+        if(needsToBeCreated){
             priceAndCount.put(item.getPrice(), 1);
         }
     }
 
     public String timeOrTimes(Integer count){
         if(count > 1){
-            return "s";
+            return "times";
         }
-        else return "";
+        else return "time";
     }
 
 
@@ -78,7 +78,7 @@ public class GroceryReporter {
             Integer counterForLines = 0;
             for(Double price: priceSet){
 
-                priceString += String.format("Price: \t %3.2f\t\t seen: %d time%s",
+                priceString += String.format("Price: \t %3.2f\t\t seen: %d %s",
                         price, priceCounts.get(price), timeOrTimes(priceCounts.get(price)))+"\n";
                 if(counterForLines == 0){
                     priceString += "-------------\t\t -------------\n";
@@ -87,7 +87,7 @@ public class GroceryReporter {
 
                 total += priceCounts.get(price);
             }
-            result += String.format("name:%8s \t\t seen: %d time%s", name, total, timeOrTimes(total)) +
+            result += String.format("name:%8s \t\t seen: %d %s", name, total, timeOrTimes(total)) +
                     "\n"+ "============= \t \t =============\n";
             result += priceString + "\n";
 
