@@ -12,8 +12,8 @@ public class ItemParser {
 
     Pattern pattern;
     Matcher matcher;
-    Pattern pattern2;
     Integer exceptionCounter = 0;
+
 
     public List<Item> parseItemList(String valueToParse) {
 
@@ -31,6 +31,8 @@ public class ItemParser {
         return listOfItems;
     }
 
+
+
     public Item parseSingleItem(String singleItem)throws ItemParseException {
         String fixed =fixInput(singleItem);
 
@@ -41,6 +43,13 @@ public class ItemParser {
 
         try {
             name = parseName(fixed).toLowerCase();
+            if(name.length() == 0){
+                exceptionCounter++;
+                throw new ItemParseException();
+            }
+            if(name.equals("co0kies")){
+                name = "cookies";
+            }
         } catch (NullPointerException e){
             exceptionCounter++;
             throw new ItemParseException();
@@ -74,16 +83,16 @@ public class ItemParser {
 
 
 
-        return new Item(name, price, type, expiration);
+        return new Item(capitalizeItemName(name), price, type, expiration);
     }
 
     private String parseName(String toBeParsed)  {
         pattern = Pattern.compile("(?i:.*name:(.*?);)");
         matcher = pattern.matcher(toBeParsed);
-        String result;
+
+
         if(matcher.find()){
-            result = matcher.group(1);
-            return result;
+            return matcher.group(1);
         }
         return null;
 
@@ -129,8 +138,12 @@ public class ItemParser {
         pattern = pattern.compile("Food(.*)expiration");
         matcher = pattern.matcher(result);
         String ultimateFix = matcher.replaceAll("Food;expiration");
-        System.out.println(ultimateFix);
+
         return ultimateFix;
+    }
+
+    private String capitalizeItemName(String toCapitalize){
+        return "" + ((Character) toCapitalize.charAt(0)).toString().toUpperCase() + toCapitalize.substring(1);
     }
 
 
